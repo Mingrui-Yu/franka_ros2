@@ -42,7 +42,11 @@ add_library(
         src/elbow_example_controller.cpp
         src/model_example_controller.cpp
         src/move_to_start_example_controller.cpp
-        src/motion_generator.cpp)
+        src/motion_generator.cpp
+        # IRM-Lab Implementation
+        src/low_level_joint_velocity_controller.cpp
+        src/low_level_joint_impedance_controller.cpp
+        )
 target_include_directories(
         ${PROJECT_NAME}
         PUBLIC

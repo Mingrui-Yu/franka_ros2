@@ -71,4 +71,16 @@
             The franka model example controller evaluates and prints the dynamic model ofFranka Robotics Robots.
         </description>
     </class>
+    <class name="franka_example_controllers/LowLevelJointVelocityController"
+           type="franka_example_controllers::LowLevelJointVelocityController" base_class_type="controller_interface::ControllerInterface">
+        <description>
+            The low-level joint velocity controller implemented by IRM-Lab.
+        </description>
+    </class>
+    <class name="franka_example_controllers/LowLevelJointImpedanceController"
+           type="franka_example_controllers::LowLevelJointImpedanceController" base_class_type="controller_interface::ControllerInterface">
+        <description>
+            The low-level joint impedance controller implemented by IRM-Lab.
+        </description>
+    </class>
 </library>
