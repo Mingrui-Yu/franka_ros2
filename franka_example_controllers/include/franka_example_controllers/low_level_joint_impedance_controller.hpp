@@ -20,6 +20,7 @@
 #include <controller_interface/controller_interface.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include "std_msgs/msg/float64_multi_array.hpp"
+#include "franka_msgs/srv/set_joint_stiffness_damping.hpp"
 #include "motion_generator.hpp"
 #include <nlohmann/json.hpp>
 
@@ -63,6 +64,7 @@ class LowLevelJointImpedanceController : public controller_interface::Controller
 
   // for subscribing the high-level commands
   rclcpp::Subscription<std_msgs::msg::Float64MultiArray>::SharedPtr command_subscriber_;
+  rclcpp::Service<franka_msgs::srv::SetJointStiffnessDamping>::SharedPtr stiffness_service_;
   Vector7d high_level_command_;
   Vector7d joint_pos_min_, joint_pos_max_;
   Vector7d joint_vel_max_; 
@@ -72,6 +74,9 @@ class LowLevelJointImpedanceController : public controller_interface::Controller
 //   nlohmann::json json_file;
 
   void updateJointStates();
+  void set_stiffness_callback(
+      const std::shared_ptr<franka_msgs::srv::SetJointStiffnessDamping::Request> request,
+      std::shared_ptr<franka_msgs::srv::SetJointStiffnessDamping::Response>      response);
   void command_callback(const std_msgs::msg::Float64MultiArray::SharedPtr msg);
 };
 

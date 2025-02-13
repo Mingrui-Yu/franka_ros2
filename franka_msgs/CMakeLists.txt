@@ -21,6 +21,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/SetForceTorqueCollisionBehavior.srv"
   "srv/SetFullCollisionBehavior.srv"
   "srv/SetJointStiffness.srv"
+  "srv/SetJointStiffnessDamping.srv"
   "srv/SetStiffnessFrame.srv"
   "srv/SetLoad.srv"
   DEPENDENCIES std_msgs geometry_msgs sensor_msgs builtin_interfaces

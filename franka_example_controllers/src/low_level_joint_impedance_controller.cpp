@@ -140,6 +140,18 @@ void LowLevelJointImpedanceController::command_callback(
   }
 }
 
+void LowLevelJointImpedanceController::set_stiffness_callback(
+      const std::shared_ptr<franka_msgs::srv::SetJointStiffnessDamping::Request> request,
+      std::shared_ptr<franka_msgs::srv::SetJointStiffnessDamping::Response>      response)
+  {
+    for (int i = 0; i < num_joints; ++i) {
+      d_gains_(i) = request->joint_damping[i];
+      k_gains_(i) = request->joint_stiffness[i];
+    }
+    response->success = true;
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Successfully reset joint stiffnesss and damping.");
+  }
+
 CallbackReturn LowLevelJointImpedanceController::on_init() {
   try {
     auto_declare<std::string>("arm_id", "panda");
@@ -192,6 +204,9 @@ CallbackReturn LowLevelJointImpedanceController::on_configure(
   // joint_acc_max_ = joint_acc_max_ * 0.5;
   // joint_jerk_max_ = joint_jerk_max_ * 0.5;
 
+  stiffness_service_ = get_node()->create_service<franka_msgs::srv::SetJointStiffnessDamping>(
+    "franka/set_joint_stiffness", std::bind(&LowLevelJointImpedanceController::set_stiffness_callback, this, std::placeholders::_1, std::placeholders::_2));
+
   command_subscriber_ = get_node()->create_subscription<std_msgs::msg::Float64MultiArray>(
       "franka/joint_impedance_command", 10, std::bind(&LowLevelJointImpedanceController::command_callback, this, std::placeholders::_1));
 
@@ -205,9 +220,7 @@ CallbackReturn LowLevelJointImpedanceController::on_activate(
   elapsed_time_ = 0.0;
   initial_q_ = q_;
 
-  // q_goal_ << 0, -M_PI_4, 0, -3 * M_PI_4, 0, M_PI_2, M_PI_4;
   q_goal_ = initial_q_;
-
   q_desired_l_ = q_desired_ll_ = q_desired_lll_ = initial_q_;
 
   return CallbackReturn::SUCCESS;
